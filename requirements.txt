@@ -1,0 +1,4 @@
+chatterbox_tts
+perth
+fastapi
+uvicorn
