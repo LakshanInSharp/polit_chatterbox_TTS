@@ -8,6 +8,7 @@ pip install chatterbox-tts
 # Runpod setup
 
 cd workspace
+
 apt-get update
 apt install python3.11
 git clone
