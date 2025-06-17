@@ -15,9 +15,9 @@ apt install -y python3.11
 
 git clone https://github.com/LakshanInSharp/polit_chatterbox_TTS.git
 
-cd chatterbox-tts
+cd polit_chatterbox_TTS
 
-python3.11 -m venv venv
+python -m venv venv
 
 source venv/bin/activate
 
