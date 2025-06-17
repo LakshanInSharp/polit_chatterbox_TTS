@@ -9,6 +9,7 @@ from pathlib import Path
 from src.chatterboxService import ChatterboxService
 from src.chatterbox.tts import ChatterboxTTS
 import uvicorn
+import re
 
 app = FastAPI()
 
@@ -35,7 +36,7 @@ async def load_model():
 
     # Load model once during startup
     base_dir = Path(__file__).resolve().parent
-    audio_prompt_path = base_dir / "src" / "lakshan.wav"
+    audio_prompt_path = base_dir / "src"/"lakshan.wav"
 
     print(f"Initializing ChatterboxTTS model on device: {device}")
     chatterbox_model = ChatterboxTTS.from_pretrained(device=device)
@@ -46,23 +47,41 @@ async def load_model():
 
 
 # Text chunking utility
-def split_text_into_chunks(text, max_chunk_length=200):
-    words = text.split()
+
+def split_text_into_chunks(text,max_chunk_length=50):
+    # Split text into sentences using regex
+    # This pattern looks for sentence endings followed by whitespace or end of string
+    sentences = re.split(r'(?<=[.!?])\s+',text.strip())
+    
     chunks = []
     current_chunk = []
     current_length = 0
-
-    for word in words:
-        if current_length + len(word) + 1 <= max_chunk_length:
-            current_chunk.append(word)
-            current_length += len(word) + 1
-        else:
+    
+    for sentence in sentences:
+        sentence = sentence.strip()
+        if not sentence:
+            continue
+            
+        # Calculate length if we add this sentence (including space if not first sentence)
+        additional_length = len(sentence)
+        if current_chunk:  # Add space before sentence if not first in chunk
+            additional_length += 1
+            
+        # If adding this sentence would exceed max length, save current chunk
+        if current_chunk and current_length + additional_length > max_chunk_length:
             chunks.append(' '.join(current_chunk))
-            current_chunk = [word]
-            current_length = len(word)
+            current_chunk = [sentence]
+            current_length = len(sentence)
+        else:
+            current_chunk.append(sentence)
+            current_length += additional_length
+    
+    # Add the last chunk if it exists
     if current_chunk:
         chunks.append(' '.join(current_chunk))
+    
     return chunks
+
 
 
 
@@ -123,6 +142,6 @@ if __name__ == "__main__":
     uvicorn.run(
         app,
         host="0.0.0.0",  # Listen on all network interfaces
-        port=8080,       # Default port
+        port=8080# Default port
           # Recommended for TTS to avoid multiple model instances
     )
