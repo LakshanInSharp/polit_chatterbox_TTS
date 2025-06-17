@@ -130,6 +130,7 @@ async def generate_audio(request: Request):
             yield b"--chunkboundary\n"
             yield buffer.read()
             yield b"\n"
+            yield b"--chunkboundary\n"
         
     headers = {
         "Content-Type": "application/octet-stream",
