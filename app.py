@@ -35,7 +35,7 @@ async def load_model():
 
     # Load model once during startup
     base_dir = Path(__file__).resolve().parent
-    audio_prompt_path = base_dir / "src" / "koli.wav"
+    audio_prompt_path = base_dir / "src" / "lakshan.wav"
 
     print(f"Initializing ChatterboxTTS model on device: {device}")
     chatterbox_model = ChatterboxTTS.from_pretrained(device=device)
