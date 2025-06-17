@@ -13,7 +13,7 @@ apt-get update
 
 apt install -y python3.11
 
-git clone <your-repo-url>  # e.g. git clone https://github.com/your-username/chatterbox-tts.git
+git clone https://github.com/LakshanInSharp/polit_chatterbox_TTS.git
 
 cd chatterbox-tts
 
