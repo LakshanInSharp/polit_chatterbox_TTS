@@ -1,9 +1,5 @@
 
-# Installation
 
-```shell
-pip install chatterbox-tts
-```
 
 # Runpod setup
 
